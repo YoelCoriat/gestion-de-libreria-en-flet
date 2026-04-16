@@ -65,9 +65,29 @@ def main(page: ft.Page):
                             ft.Container(
                                 content=(
                                     ft.Row(
-                                        controls=[available_control_book_list,
-                                                  unavailable_control_book_list
-                                                  ],
+                                        controls=[
+                                            ft.Column(
+                                                controls=[
+                                                    ft.Text("Libros disponibles", size=25),
+                                                    ft.Container(
+                                                        content=available_control_book_list,
+                                                        expand=True
+                                                    )
+                                                ],
+                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                            ),
+
+                                            ft.Column(
+                                                controls=[
+                                                    ft.Text("Libros no disponibles", size=25),
+                                                    ft.Container(
+                                                        content=unavailable_control_book_list,
+                                                        expand=True
+                                                    )
+                                                ],
+                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                            ),
+                                        ],
                                         vertical_alignment=ft.CrossAxisAlignment.START,
                                         alignment=ft.MainAxisAlignment.CENTER,
                                     )

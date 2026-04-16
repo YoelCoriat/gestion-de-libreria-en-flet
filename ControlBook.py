@@ -23,7 +23,7 @@ class ControlBook(ft.Container):
 
         self.button_trash = ft.IconButton(
             icon=ft.Icon(icon=ft.Icons.DELETE,
-                         color=ft.Colors.RED,
+                         color=ft.Colors.WHITE,
                          size=25),
             on_click=self.on_submit_trash)
 

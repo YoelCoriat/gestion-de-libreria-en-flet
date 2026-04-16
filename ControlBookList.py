@@ -10,6 +10,7 @@ class ControlBookList(ft.Container):
         self.border_radius = 10
         self.bgcolor = ft.Colors.with_opacity(0.2, ft.Colors.BLACK)
 
+
         self.state = state
 
         self.empty_text = ft.Text(
@@ -28,7 +29,7 @@ class ControlBookList(ft.Container):
 
     def get_allowed_books(self):
         return self.state.books
-    
+
     def force_sync(self):
         self.list_view.controls.clear()
         for book in self.get_allowed_books():
