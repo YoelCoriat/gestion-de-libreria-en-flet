@@ -1,5 +1,11 @@
 import flet as ft
 
+"""
+Esta clase se utiliza varias veces en ControlAddBook, esta es una subclase que en realidad se pudo haber 
+definido como una clase dentro de ControlAddBook. La mayoría de los datos son visuales, lo unico importante se accede
+dentro de ControllAddBook viendo el valor del TextField
+"""
+
 @ft.control
 class ControlFormAdd(ft.Column):
     def __init__(self, on_submit_callback=None, *args, **kwargs):

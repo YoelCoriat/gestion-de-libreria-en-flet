@@ -1,6 +1,11 @@
 from ControlAvailableBookList import ControlAvailableBookList
 import flet as ft
 
+"""
+Hereditario de ControlAvailableBookList que tiene un override al método de get_allowed_books que se actualiza con el AppState
+para filtrarse con el buscador.
+"""
+
 @ft.control
 class ControlUnavailableBookList(ControlAvailableBookList):
     def __init__(self, state):

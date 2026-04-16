@@ -1,6 +1,11 @@
 import flet as ft
 from ControlBook import ControlBook
 
+"""
+Esta clase controla a una BookList
+Sincroniza sus datos a traves de force_sync en un callback en AppState
+"""
+
 @ft.control
 class ControlBookList(ft.Container):
     def __init__(self, state):

@@ -1,5 +1,8 @@
 import flet as ft
 
+"""
+Form de busqueda de libros. Esta enlazado con AppState al cambiar el texto
+"""
 @ft.control
 class ControlFormSearchBooks(ft.Container):
     def __init__(self, state, *args, **kwargs):

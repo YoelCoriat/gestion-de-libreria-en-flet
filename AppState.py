@@ -1,5 +1,11 @@
 from Book import Book
 
+"""
+Este es el centro del programa.
+Todos los datos importantes para ser utilizados a traves del programa se deben almacenar aqui para ser accedidos por
+los demas controles.
+Idealmente definir metodos para cada cambio en el programa, no es ideal llamar .notify() fuera de esta clase.
+"""
 class AppState:
     def __init__(self):
         self.books = []
@@ -36,4 +42,3 @@ class AppState:
     def update_search_filter_books(self, search_filter_books):
         self.search_filter_books = search_filter_books
         self.notify()
-        print(self.search_filter_books)

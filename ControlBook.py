@@ -4,6 +4,13 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ControlBookList import ControlBookList
 
+"""
+Este es el control de cada libro. Se puede expandir, y tiene diferentes metodos para todas las diferentes opciones como
+expandirse, eliminar, o minimizar
+También tiene un checkbox, que al ser apretado se le notifica al AppState a través de un uuid unico por Book que debe
+ser notificado a través de un método en AppState.py
+"""
+
 import flet as ft
 from Book import Book
 

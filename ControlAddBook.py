@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import flet as ft
 from ControlFormAdd import ControlFormAdd
-from ControlBook import ControlBook
-from ControlBookList import ControlBookList
 from Book import Book
+
+"""
+Controlador de añadir libros.
+Utiliza la clase de ControlFormAdd para realizar su funcion, y está enlazada con AppState.
+Tiene una subclase para las funciones del botón
+"""
 
 @ft.control
 class ControlAddBook(ft.Container):
@@ -104,12 +108,3 @@ class ControlAddBook(ft.Container):
         author=self.author.text_field.value,
         isbn=self.isbn.text_field.value))
         return True
-
-if __name__ == "__main__":
-    def main(page: ft.Page):
-        page.title = "AddBook"
-        book_list = ControlBookList()
-        add_book = ControlAddBook(book_list)
-        page.add(add_book)
-
-    ft.run(main)
