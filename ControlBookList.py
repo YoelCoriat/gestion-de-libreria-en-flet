@@ -26,16 +26,16 @@ class ControlBookList(ft.Container):
 
         self.content = self.list_view
 
+    def get_allowed_books(self):
+        return self.state.books
+    
     def force_sync(self):
         self.list_view.controls.clear()
-        for book in self.state.books:
+        for book in self.get_allowed_books():
             self.list_view.controls.append(
                 ControlBook(
                     book=book,
-                    state=self.state,
+                    state=self.state
                 )
             )
         self.list_view.update()
-
-
-

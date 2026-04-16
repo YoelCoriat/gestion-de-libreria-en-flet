@@ -7,17 +7,13 @@ if TYPE_CHECKING:
 import flet as ft
 from Book import Book
 
-"""
-TODO:
-SUBSCRIBE EN BOOK.PY Y REEMPLAZAR BOOKLIST
-
-"""
 @ft.control
 class ControlBook(ft.Container):
-    def __init__(self, book: Book, state, *args, **kwargs):
+    def __init__(self, book: Book, state, visible=True, *args, **kwargs):
         super().__init__()
         self.book = book
         self.state = state
+        self.visible = visible
 
         self.dropdown_arrow = ft.IconButton(
             icon=ft.Icon(

@@ -1,9 +1,10 @@
 import flet as ft
 
 from ControlBookList import ControlBookList
-from ControlBook import ControlBook
 from AddBook import AddBook
 from AppState import AppState
+from AvailableControlBookList import AvailableControlBookList
+from UnavailableControlBooklist import UnavailableControlBookList
 
 def main(page: ft.Page):
     page.title = "Gestion de Libros"
@@ -20,11 +21,15 @@ def main(page: ft.Page):
     )
 
     state = AppState()
-    control_book_list = ControlBookList(state)
-    control_book_list2 = ControlBookList(state)
 
+    control_book_list = ControlBookList(state)
     state.subscribe(control_book_list.force_sync)
-    state.subscribe(control_book_list2.force_sync)
+
+    available_control_book_list = AvailableControlBookList(state)
+    state.subscribe(available_control_book_list.force_sync)
+
+    unavailable_control_book_list = UnavailableControlBookList(state)
+    state.subscribe(unavailable_control_book_list.force_sync)
 
     add_book = AddBook(state)
 
@@ -51,8 +56,7 @@ def main(page: ft.Page):
                                 content=(
                                     ft.Row(
                                         controls=[control_book_list,
-                                        add_book,
-                                        control_book_list2],
+                                        add_book],
                                         vertical_alignment=ft.CrossAxisAlignment.START,
                                         alignment=ft.MainAxisAlignment.CENTER,
                                     )
@@ -61,7 +65,8 @@ def main(page: ft.Page):
                             ft.Container(
                                 content=(
                                     ft.Row(
-                                        controls=[
+                                        controls=[available_control_book_list,
+                                                  unavailable_control_book_list
                                                   ],
                                         vertical_alignment=ft.CrossAxisAlignment.START,
                                         alignment=ft.MainAxisAlignment.CENTER,

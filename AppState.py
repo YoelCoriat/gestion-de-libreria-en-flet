@@ -13,9 +13,6 @@ class AppState:
     def notify(self):
         for callback in self._listeners:
             callback()
-        print("update all")
-        for book in self.books:
-            print(book.title)
 
     def add_book(self, book_add):
         self.books.append(book_add)
