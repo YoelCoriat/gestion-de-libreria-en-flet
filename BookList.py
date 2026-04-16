@@ -3,14 +3,14 @@ from Book import Book
 
 @ft.control
 class BookList(ft.Container):
-    def __init__(self):
+    def __init__(self, state):
         super().__init__()
         self.width = 700
         self.padding = 10
         self.border_radius = 10
         self.bgcolor = ft.Colors.with_opacity(0.2, ft.Colors.BLACK)
 
-        self.books = []
+        self.state = state
 
         self.empty_text = ft.Text(
             value="Sin libros",
@@ -27,32 +27,29 @@ class BookList(ft.Container):
         self.content = self.empty_text
 
     def add_book(self, book: Book):
-        if not self.books:
+        if not self.state.books:
             self.content = self.list_view
 
-        self.books.append(book)
+        self.state.books.append(book)
         self.list_view.controls.append(book)
-
+        self.state.notify()
 
     def remove_book(self, book: Book):
-        self.books.remove(book)
+        self.state.books.remove(book)
         self.list_view.controls.remove(book)
 
-        if not self.books:
+        if not self.state.books:
             self.content = self.empty_text
+        self.state.notify()
 
     def force_update(self):
-        if not self.books:
+        if not self.state.books:
             self.content = self.empty_text
         else:
             self.content = self.list_view
 
-    def sync(self, books: list):
-        for book in self.books:
-            self.list_view.controls.remove(book)
-        self.books = books
-        for book in self.books:
-            self.list_view.controls.append(book)
+
+    def force_sync(self):
         self.force_update()
 
 

@@ -5,7 +5,11 @@ if TYPE_CHECKING:
     from BookList import BookList
 
 import flet as ft
+"""
+TODO:
+SUBSCRIBE EN BOOK.PY Y REEMPLAZAR BOOKLIST
 
+"""
 @ft.control
 class Book(ft.Container):
     def __init__(self, title, author, isbn, book_list: "BookList", *args, **kwargs):

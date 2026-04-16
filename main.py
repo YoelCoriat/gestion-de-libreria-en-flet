@@ -23,8 +23,19 @@ def main(page: ft.Page):
             self.books = []
             self.clients = []
 
+            self._listeners = []
+
+        def subscribe(self, callback):
+            self._listeners.append(callback)
+
+        def notify(self):
+            for callback in self._listeners:
+                callback()
+            print("update all")
+
     state = AppState()
-    book_list = BookList()
+    book_list = BookList(state)
+    state.subscribe(book_list.force_sync)
     add_book = AddBook(book_list)
 
     main_column.controls.append(
