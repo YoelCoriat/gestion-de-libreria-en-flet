@@ -3,6 +3,7 @@ import flet as ft
 from ControlBookList import ControlBookList
 from ControlBook import ControlBook
 from AddBook import AddBook
+from AppState import AppState
 
 def main(page: ft.Page):
     page.title = "Gestion de Libros"
@@ -17,23 +18,6 @@ def main(page: ft.Page):
 
         )
     )
-
-    class AppState:
-        def __init__(self):
-            self.books = []
-            self.clients = []
-
-            self._listeners = []
-
-        def subscribe(self, callback):
-            self._listeners.append(callback)
-
-        def notify(self):
-            for callback in self._listeners:
-                callback()
-            print("update all")
-            for book in self.books:
-                print(book.title)
 
     state = AppState()
     control_book_list = ControlBookList(state)

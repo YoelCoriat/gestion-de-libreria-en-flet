@@ -77,9 +77,6 @@ class AddBook(ft.Container):
         ])
 
     def event_add_book(self, e):
-        return self.add_book()
-
-    def add_book(self):
         error = False
         if self.title.text_field.value == "":
             error = True
@@ -100,16 +97,13 @@ class AddBook(ft.Container):
             self.isbn.valid()
 
         if error:
-            return 0
+            return False
 
-        self.state.books.append(ControlBook(
+        self.state.add_book(Book(
             title=self.title.text_field.value,
         author=self.author.text_field.value,
-        isbn=self.isbn.text_field.value,
-        state=self.state))
-
-        self.state.notify()
-        return 1
+        isbn=self.isbn.text_field.value))
+        return True
 
 if __name__ == "__main__":
     def main(page: ft.Page):

@@ -5,6 +5,8 @@ if TYPE_CHECKING:
     from ControlBookList import ControlBookList
 
 import flet as ft
+from Book import Book
+
 """
 TODO:
 SUBSCRIBE EN BOOK.PY Y REEMPLAZAR BOOKLIST
@@ -12,20 +14,16 @@ SUBSCRIBE EN BOOK.PY Y REEMPLAZAR BOOKLIST
 """
 @ft.control
 class ControlBook(ft.Container):
-    def __init__(self, title, author, isbn, state, *args, **kwargs):
+    def __init__(self, book: Book, state, *args, **kwargs):
         super().__init__()
+        self.book = book
         self.state = state
-        self.title = title
-        self.author = author
-        self.isbn = isbn
-        self.available = True
 
-        self.dropped = False
         self.dropdown_arrow = ft.IconButton(
             icon=ft.Icon(
                 icon=ft.Icons.ARROW_DROP_DOWN,
                 color="white"),
-            on_click=self.on_submit_dropdown)
+            on_click=self.on_submit_dropdown_arrow)
 
         self.button_trash = ft.IconButton(
             icon=ft.Icon(icon=ft.Icons.DELETE,
@@ -35,19 +33,19 @@ class ControlBook(ft.Container):
 
         self.checkbox_available = ft.Checkbox(
             label="Disponible",
-            value=True,
+            value=self.book.available,
             on_change=self.checkbox_change)
 
         self.info_column = ft.Column(
             controls=[
                 ft.Row(
                     controls=[
-                        ft.Text(f"Escrito por: {self.author}", expand=True, size=20)
+                        ft.Text(f"Escrito por: {self.book.author}", expand=True, size=20)
                     ],
                 ),
                 ft.Row(
                     controls=[
-                        ft.Text(f"ISBN: {self.isbn}", expand=True, size=20)
+                        ft.Text(f"ISBN: {self.book.isbn}", expand=True, size=20)
                     ],
                 ),
                 ft.Row(
@@ -69,7 +67,7 @@ class ControlBook(ft.Container):
                                 color=ft.Colors.WHITE,
                                 size=25),
                         ft.Text(
-                            self.title,
+                            self.book.title,
                             expand=True,
                             size=25
                         ),
@@ -88,30 +86,39 @@ class ControlBook(ft.Container):
         self.border_radius = 6
         self.bgcolor=ft.Colors.with_opacity(0.08, ft.Colors.WHITE)
 
-    def on_submit_dropdown(self, e):
-        if not self.dropped:
-            self.dropped = True
+        self.update_dropdown()
 
+
+    def on_submit_dropdown_arrow(self, e):
+        if self.book.dropped:
+            self.book.dropped = False
+        else:
+            self.book.dropped = True
+
+        self.update_dropdown()
+        self.state.notify()
+
+    def update_dropdown(self):
+        if self.book.dropped:
             self.height = 200
             self.info_column.visible = True
             self.dropdown_arrow.icon = ft.Icon(
                             icon=ft.Icons.ARROW_DROP_UP,
                             color="white")
+
         else:
-            self.dropped = False
             self.dropdown_arrow.icon = ft.Icon(
                             icon=ft.Icons.ARROW_DROP_DOWN,
                             color="white")
-
             self.height = None
             self.info_column.visible = False
 
+
     def on_submit_trash(self, e):
-        self.state.books.remove(self)
-        self.state.notify()
+        self.state.remove_book(self.book)
 
     def checkbox_change(self, e):
-        self.available = self.checkbox_available.value
+        self.state.set_book_available(self.book, self.checkbox_available.value)
 
     def hide(self):
         self.visible = False

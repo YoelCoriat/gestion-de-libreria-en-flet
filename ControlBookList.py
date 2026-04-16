@@ -25,32 +25,17 @@ class ControlBookList(ft.Container):
         )
 
         self.content = self.list_view
-        #self.content = self.empty_text
-
-    def add_book(self, book: ControlBook):
-        #if not self.state.books:
-        #    self.content = self.list_view
-
-        self.state.books.append(book)
-        self.list_view.controls.append(book)
-        self.state.notify()
-
-    def remove_book(self, book: ControlBook):
-        self.state.books.remove(book)
-        self.list_view.controls.remove(book)
-
-        #if not self.state.books:
-        #    self.content = self.empty_text
-        self.state.notify()
-
-    def force_update(self):
-        #if not self.state.books:
-        self.list_view.update()
-
 
     def force_sync(self):
-        self.list_view.controls = self.state.books
-        self.force_update()
+        self.list_view.controls.clear()
+        for book in self.state.books:
+            self.list_view.controls.append(
+                ControlBook(
+                    book=book,
+                    state=self.state,
+                )
+            )
+        self.list_view.update()
 
 
 
