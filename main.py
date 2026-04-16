@@ -1,7 +1,7 @@
 import flet as ft
 
-from BookList import BookList
-from Book import Book
+from ControlBookList import ControlBookList
+from ControlBook import ControlBook
 from AddBook import AddBook
 
 def main(page: ft.Page):
@@ -32,11 +32,17 @@ def main(page: ft.Page):
             for callback in self._listeners:
                 callback()
             print("update all")
+            for book in self.books:
+                print(book.title)
 
     state = AppState()
-    book_list = BookList(state)
-    state.subscribe(book_list.force_sync)
-    add_book = AddBook(book_list)
+    control_book_list = ControlBookList(state)
+    control_book_list2 = ControlBookList(state)
+
+    state.subscribe(control_book_list.force_sync)
+    state.subscribe(control_book_list2.force_sync)
+
+    add_book = AddBook(state)
 
     main_column.controls.append(
         ft.Tabs(
@@ -60,8 +66,9 @@ def main(page: ft.Page):
                             ft.Container(
                                 content=(
                                     ft.Row(
-                                        controls=[book_list,
-                                        add_book],
+                                        controls=[control_book_list,
+                                        add_book,
+                                        control_book_list2],
                                         vertical_alignment=ft.CrossAxisAlignment.START,
                                         alignment=ft.MainAxisAlignment.CENTER,
                                     )

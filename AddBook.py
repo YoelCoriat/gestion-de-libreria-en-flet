@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import flet as ft
 from Form import Form
+from ControlBook import ControlBook
+from ControlBookList import ControlBookList
 from Book import Book
-from BookList import BookList
 
 @ft.control
 class AddBook(ft.Container):
@@ -24,14 +25,14 @@ class AddBook(ft.Container):
         def on_submit(self, e):
             self.on_submit_callback(e)
 
-    def __init__(self, book_list: BookList, *args, **kwargs):
+    def __init__(self, state, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.bgcolor = ft.Colors.with_opacity(0.2, ft.Colors.BLACK)
         self.width = 550
         self.height = 300
         self.border_radius = 13
 
-        self.book_list = book_list
+        self.state = state
         self.title = Form(
             label="Titulo",
             width=500,
@@ -101,20 +102,19 @@ class AddBook(ft.Container):
         if error:
             return 0
 
-        self.book_list.add_book(Book(
+        self.state.books.append(ControlBook(
             title=self.title.text_field.value,
         author=self.author.text_field.value,
         isbn=self.isbn.text_field.value,
-        book_list=self.book_list)
-        )
+        state=self.state))
 
-        self.book_list.update()
+        self.state.notify()
         return 1
 
 if __name__ == "__main__":
     def main(page: ft.Page):
         page.title = "AddBook"
-        book_list = BookList()
+        book_list = ControlBookList()
         add_book = AddBook(book_list)
         page.add(add_book)
 
