@@ -1,7 +1,7 @@
 import flet as ft
 
 @ft.control
-class FormSearchBooks(ft.Container):
+class ControlFormSearchBooks(ft.Container):
     def __init__(self, state, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.state = state

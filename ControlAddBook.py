@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import flet as ft
-from FormAdd import FormAdd
+from ControlFormAdd import ControlFormAdd
 from ControlBook import ControlBook
 from ControlBookList import ControlBookList
 from Book import Book
 
 @ft.control
-class AddBook(ft.Container):
+class ControlAddBook(ft.Container):
 
     @ft.control
     class _ButtonAddBook(ft.OutlinedButton):
@@ -33,17 +33,17 @@ class AddBook(ft.Container):
         self.border_radius = 13
 
         self.state = state
-        self.title = FormAdd(
+        self.title = ControlFormAdd(
             label="Titulo",
             width=500,
             max_length=50,
             on_submit_callback=self.event_add_book)
-        self.author = FormAdd(
+        self.author = ControlFormAdd(
             label="Autor",
             width=500,
             max_length=50,
             on_submit_callback=self.event_add_book)
-        self.isbn = FormAdd(
+        self.isbn = ControlFormAdd(
             label="ISBN",
             width=350,
             max_length=16,
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     def main(page: ft.Page):
         page.title = "AddBook"
         book_list = ControlBookList()
-        add_book = AddBook(book_list)
+        add_book = ControlAddBook(book_list)
         page.add(add_book)
 
     ft.run(main)

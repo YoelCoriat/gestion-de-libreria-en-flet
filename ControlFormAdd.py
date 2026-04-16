@@ -1,7 +1,7 @@
 import flet as ft
 
 @ft.control
-class FormAdd(ft.Column):
+class ControlFormAdd(ft.Column):
     def __init__(self, on_submit_callback=None, *args, **kwargs):
         super().__init__()
 

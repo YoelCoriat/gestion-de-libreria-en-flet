@@ -1,8 +1,8 @@
-from ControlBookList import ControlBookList
+from ControlAvailableBookList import ControlAvailableBookList
 import flet as ft
 
 @ft.control
-class AvailableControlBookList(ControlBookList):
+class ControlUnavailableBookList(ControlAvailableBookList):
     def __init__(self, state):
         super().__init__(state)
         self.width = 600
@@ -13,7 +13,7 @@ class AvailableControlBookList(ControlBookList):
         search = self.state.search_filter_books.lower().strip()
 
         for book in self.state.books:
-            if book.available:
+            if not book.available:
                 if search in book.title.lower():
                     result.append(book)
 
