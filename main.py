@@ -5,6 +5,7 @@ from AddBook import AddBook
 from AppState import AppState
 from AvailableControlBookList import AvailableControlBookList
 from UnavailableControlBooklist import UnavailableControlBookList
+from FormSearchBooks import FormSearchBooks
 
 def main(page: ft.Page):
     page.title = "Gestion de Libros"
@@ -31,6 +32,7 @@ def main(page: ft.Page):
     unavailable_control_book_list = UnavailableControlBookList(state)
     state.subscribe(unavailable_control_book_list.force_sync)
 
+    form_search = FormSearchBooks(state)
     add_book = AddBook(state)
 
     main_column.controls.append(
@@ -64,32 +66,47 @@ def main(page: ft.Page):
                             ),
                             ft.Container(
                                 content=(
-                                    ft.Row(
+                                    ft.Column(
                                         controls=[
-                                            ft.Column(
-                                                controls=[
-                                                    ft.Text("Libros disponibles", size=25),
-                                                    ft.Container(
-                                                        content=available_control_book_list,
-                                                        expand=True
-                                                    )
+
+                                            ft.Row(
+                                                controls=[form_search
                                                 ],
-                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                alignment=ft.MainAxisAlignment.CENTER,
                                             ),
 
-                                            ft.Column(
+                                            ft.Row(
                                                 controls=[
-                                                    ft.Text("Libros no disponibles", size=25),
-                                                    ft.Container(
-                                                        content=unavailable_control_book_list,
-                                                        expand=True
-                                                    )
+
+                                                    ft.Column(
+                                                        controls=[
+                                                            ft.Text("Libros disponibles", size=25),
+                                                            ft.Container(
+                                                                content=available_control_book_list,
+                                                                expand=True
+                                                            )
+                                                        ],
+                                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                    ),
+
+                                                    ft.Column(
+                                                        controls=[
+                                                            ft.Text("Libros no disponibles", size=25),
+                                                            ft.Container(
+                                                                content=unavailable_control_book_list,
+                                                                expand=True
+                                                            )
+                                                        ],
+                                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                    ),
+
                                                 ],
-                                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                vertical_alignment=ft.CrossAxisAlignment.START,
+                                                alignment=ft.MainAxisAlignment.CENTER,
+                                                expand=True,
                                             ),
-                                        ],
-                                        vertical_alignment=ft.CrossAxisAlignment.START,
-                                        alignment=ft.MainAxisAlignment.CENTER,
+
+                                        ]
                                     )
                                 ),
                             ),

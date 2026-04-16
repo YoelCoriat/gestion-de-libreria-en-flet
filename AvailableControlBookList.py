@@ -8,4 +8,14 @@ class AvailableControlBookList(ControlBookList):
         self.width = 600
 
     def get_allowed_books(self):
-        return [book for book in self.state.books if book.available]
+        result = []
+
+        search = self.state.search_filter_books.lower().strip()
+
+        for book in self.state.books:
+            if book.available:
+                if search in book.title.lower():
+                    result.append(book)
+
+        return result
+

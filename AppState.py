@@ -7,6 +7,8 @@ class AppState:
 
         self._listeners = []
 
+        self.search_filter_books = ""
+
     def subscribe(self, callback):
         self._listeners.append(callback)
 
@@ -30,3 +32,8 @@ class AppState:
             if book.uuid == book_change_available.uuid:
                 book.available = available
                 self.notify()
+
+    def update_search_filter_books(self, search_filter_books):
+        self.search_filter_books = search_filter_books
+        self.notify()
+        print(self.search_filter_books)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import flet as ft
-from Form import Form
+from FormAdd import FormAdd
 from ControlBook import ControlBook
 from ControlBookList import ControlBookList
 from Book import Book
@@ -33,17 +33,17 @@ class AddBook(ft.Container):
         self.border_radius = 13
 
         self.state = state
-        self.title = Form(
+        self.title = FormAdd(
             label="Titulo",
             width=500,
             max_length=50,
             on_submit_callback=self.event_add_book)
-        self.author = Form(
+        self.author = FormAdd(
             label="Autor",
             width=500,
             max_length=50,
             on_submit_callback=self.event_add_book)
-        self.isbn = Form(
+        self.isbn = FormAdd(
             label="ISBN",
             width=350,
             max_length=16,

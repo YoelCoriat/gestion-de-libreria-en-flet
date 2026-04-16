@@ -1,7 +1,7 @@
 import flet as ft
 
 @ft.control
-class Form(ft.Column):
+class FormAdd(ft.Column):
     def __init__(self, on_submit_callback=None, *args, **kwargs):
         super().__init__()
 
@@ -47,7 +47,7 @@ class Form(ft.Column):
         self.change_color()
         self.error_text.value = ""
 
-    def on_focus(self):
+    def on_focus(self, e):
         self.change_color()
 
     def on_submit(self, e):
