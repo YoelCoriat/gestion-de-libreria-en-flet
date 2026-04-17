@@ -6,14 +6,15 @@ Todos los datos importantes para ser utilizados a traves del programa se deben a
 los demas controles.
 Idealmente definir metodos para cada cambio en el programa, no es ideal llamar .notify() fuera de esta clase.
 """
+
+
 class AppState:
     def __init__(self):
         self.books = []
         self.clients = []
-
         self._listeners = []
-
         self.search_filter_books = ""
+        self.search_filter_clients = ""
 
     def subscribe(self, callback):
         self._listeners.append(callback)
@@ -42,3 +43,28 @@ class AppState:
     def update_search_filter_books(self, search_filter_books):
         self.search_filter_books = search_filter_books
         self.notify()
+
+    # Gestión de Clientes 
+    # Se agrego metodos para manejar la lista de clientes y el filtro de búsqueda.
+    # Estos siguen el mismo patrón que los métodos de libros de la Parte 1.
+
+    def add_client(self, client):
+        self.clients.append(client)
+        self.notify()
+
+    def remove_client(self, client_remove):
+        for client in self.clients:
+            if client.uuid == client_remove.uuid:
+                self.clients.remove(client)
+                self.notify()
+                return
+
+    def update_search_filter_clients(self, search_filter_clients):
+        self.search_filter_clients = search_filter_clients
+        self.notify()
+
+    def get_client_by_cedula(self, cedula):
+        for client in self.clients:
+            if client.cedula == cedula:
+                return client
+        return None
