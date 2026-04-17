@@ -6,6 +6,11 @@ from AppState import AppState
 from ControlAvailableBookList import ControlAvailableBookList
 from ControlUnavailableBooklist import ControlUnavailableBookList
 from ControlFormSearchBooks import ControlFormSearchBooks
+from Client import Client
+from ControlClientList import ControlClientList
+from ControlFilteredClientList import ControlFilteredClientList
+from ControlFormSearchClients import ControlFormSearchClients
+from ControlAddClient import ControlAddClient
 
 """
 La forma que funciona el codigo en su esencia es que todos los datos importantes se almacenan en AppState.py y sus atributos.
@@ -65,6 +70,14 @@ def main(page: ft.Page):
 
     form_search = ControlFormSearchBooks(state)
     add_book = ControlAddBook(state)
+
+    #   Gestión de Clientes 
+    # Se instancian los controles de clientes y se suscriben al AppState
+    # para sincronizarse automáticamente con cada cambio en state.clients.
+    filtered_client_list = ControlFilteredClientList(state)
+    state.subscribe(filtered_client_list.force_sync)
+    form_search_clients = ControlFormSearchClients(state)
+    add_client = ControlAddClient(state)
 
     main_column.controls.append(
         ft.Tabs(
@@ -142,9 +155,34 @@ def main(page: ft.Page):
                                 ),
                             ),
                             ft.Container(
-                                content=ft.Text("This is Tab 3"),
-
-                            ),
+                                content=ft.Column(
+                                    controls=[
+                                         ft.Row(
+                                             controls=[form_search_clients],
+                                             alignment=ft.MainAxisAlignment.CENTER,
+                                          ),
+                                          ft.Row(
+                                              controls=[
+                                                   ft.Column(
+                                                       controls=[
+                                                            ft.Text("Clientes registrados", size=25),
+                                                            ft.Container(
+                                                                content=filtered_client_list,
+                                                                expand=True,
+                                                            ),
+                                              ],
+                                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                          ),
+                                          add_client,
+                                        ],
+                                        vertical_alignment=ft.CrossAxisAlignment.START,
+                                        alignment=ft.MainAxisAlignment.CENTER,
+                                        expand=True,
+                                    ),
+                               ]
+                            )
+                        ),
+                            
                             ft.Container(
                                 content=ft.Text("This is Tab 4"),
 
