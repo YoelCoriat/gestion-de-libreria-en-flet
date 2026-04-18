@@ -2,6 +2,8 @@ import flet as ft
 
 # Esta clase representa el control de la interfaz para realizar préstamos de libros
 # Hereda de ft.Column, significa que los elementos se organizarán verticalmente en la pantalla
+
+@ft.control
 class ControlLoanBook(ft.Column):
 
     # Se ejecuta cuando se crea el control dentro de la aplicación
@@ -19,6 +21,7 @@ class ControlLoanBook(ft.Column):
 
         # Crea un botón que ejecuta la acción de préstamo
         # Cuando el usuario haga clic, se ejecutará el método loan_book
+
         self.loan_button = ft.ElevatedButton(
             text="Prestar Libro",
             on_click=self.loan_book

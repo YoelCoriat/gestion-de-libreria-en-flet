@@ -4,6 +4,7 @@ from ControlBookList import ControlBookList
 from ControlAddBook import ControlAddBook
 from AppState import AppState
 from ControlAvailableBookList import ControlAvailableBookList
+from ControlLoanBook import ControlLoanBook
 from ControlUnavailableBooklist import ControlUnavailableBookList
 from ControlFormSearchBooks import ControlFormSearchBooks
 from Client import Client
@@ -41,6 +42,11 @@ Toda la logica se realiza dentro de estos programas, y main es solamente posicio
 inicializacion del AppState y sincronizacion con las clases control)
 """
 
+"""
+TODO
+ARREGLAR ERRORES DE MERGE DE 3 BRANCHES
+"""
+
 def main(page: ft.Page):
     page.title = "Gestion de Libros"
     main_column = ft.Column(
@@ -70,6 +76,8 @@ def main(page: ft.Page):
 
     form_search = ControlFormSearchBooks(state)
     add_book = ControlAddBook(state)
+
+    control_loan_book = ControlLoanBook(state)
 
     #   Gestión de Clientes 
     # Se instancian los controles de clientes y se suscriben al AppState
@@ -184,7 +192,31 @@ def main(page: ft.Page):
                         ),
                             
                             ft.Container(
-                                content=ft.Text("This is Tab 4"),
+                                ft.Column(
+                                    controls=[
+                                        ft.Row(
+                                            controls=[control_loan_book],
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                        ),
+                                        ft.Row(
+                                            controls=[
+                                                ft.Column(
+                                                    controls=[
+                                                        ft.Text("Loan", size=25),
+                                                        ft.Container(
+                                                            content=filtered_client_list,
+                                                            expand=True,
+                                                        ),
+                                                    ],
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                ),
+                                            ],
+                                            vertical_alignment=ft.CrossAxisAlignment.START,
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                            expand=True,
+                                        ),
+                                    ]
+                                ),
 
                             ),
                         ],
