@@ -1,4 +1,5 @@
 from Book import Book
+from Loan import Loan
 
 """
 Este es el centro del programa.
@@ -12,6 +13,7 @@ class AppState:
     def __init__(self):
         self.books = []
         self.clients = []
+        self.loans = []
         self._listeners = []
         self.search_filter_books = ""
         self.search_filter_clients = ""
@@ -68,3 +70,36 @@ class AppState:
             if client.cedula == cedula:
                 return client
         return None
+
+    
+    # Préstamo de libro
+    
+    def create_loan(self, book_uuid, client_cedula):
+
+        # Busca el cliente dentro de la lista de clientes utilizando su cédula
+        # Se usa el método get_client_by_cedula que ya existe en AppState
+        client = self.get_client_by_cedula(client_cedula)
+
+        if client is None:
+            return False
+
+        for book in self.books:
+
+            if book.uuid == book_uuid:
+
+                if book.available:
+
+                    loan = Loan(book, client)
+
+                    self.loans.append(loan)
+
+                    book.available = False
+
+                    self.notify()
+
+                    return True
+
+                else:
+                    return False
+
+        return False
