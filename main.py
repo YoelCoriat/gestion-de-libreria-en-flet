@@ -204,7 +204,7 @@ def main(page: ft.Page):
                                                     controls=[
                                                         ft.Text("Loan", size=25),
                                                         ft.Container(
-                                                            content=filtered_client_list,
+                                                            content=ft.Text("Loans disponibles", size=25),
                                                             expand=True,
                                                         ),
                                                     ],

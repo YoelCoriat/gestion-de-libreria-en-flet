@@ -10,6 +10,7 @@ class ControlLoanBook(ft.Column):
     def __init__(self, state):
         super().__init__()
 
+        self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         # permite acceder a la lista de libros, clientes y métodos como create_loan()
         self.state = state
 
@@ -22,8 +23,8 @@ class ControlLoanBook(ft.Column):
         # Crea un botón que ejecuta la acción de préstamo
         # Cuando el usuario haga clic, se ejecutará el método loan_book
 
-        self.loan_button = ft.ElevatedButton(
-            text="Prestar Libro",
+        self.loan_button = ft.Button(
+            content=ft.Text("Prestar Libro"),
             on_click=self.loan_book
         )
 
