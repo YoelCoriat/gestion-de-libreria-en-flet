@@ -37,7 +37,8 @@ class ControlBook(ft.Container):
         self.checkbox_available = ft.Checkbox(
             label="Disponible",
             value=self.book.available,
-            on_change=self.checkbox_change)
+            on_change=self.checkbox_change,
+            disabled=True)
 
         self.info_column = ft.Column(
             controls=[

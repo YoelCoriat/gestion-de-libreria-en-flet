@@ -4,48 +4,103 @@ import flet as ft
 # Hereda de ft.Column, significa que los elementos se organizarán verticalmente en la pantalla
 
 @ft.control
-class ControlLoanBook(ft.Column):
-
-    # Se ejecuta cuando se crea el control dentro de la aplicación
+class ControlLoanBook(ft.Container):
     def __init__(self, state):
         super().__init__()
-
+        self.width = 700
+        self.padding = 10
+        self.border_radius = 10
+        self.bgcolor = ft.Colors.with_opacity(0.2, ft.Colors.BLACK)
         self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-        # permite acceder a la lista de libros, clientes y métodos como create_loan()
         self.state = state
 
-        # Puede elegir qué libro desea prestar via el dropdown
-        self.book_dropdown = ft.Dropdown(label="Seleccionar Libro")
+        @ft.control
+        class _DropdownLoan(ft.Dropdown):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.editable = True
+                self.width = 300
+                self.border_color = "grey"
+                self.filled = True
+                self.fill_color = ft.Colors.with_opacity(0.2, ft.Colors.BLACK)
+                self.disabled = True
+                self.options = []
 
-        # Permite elegir qué cliente tomará el libro prestado con el menu
-        self.client_dropdown = ft.Dropdown(label="Seleccionar Cliente")
+            def set_options(self, options):
+                self.options = options
+                if options:
+                    self.disabled = False
+                else:
+                    self.disabled = True
 
-        # Crea un botón que ejecuta la acción de préstamo
-        # Cuando el usuario haga clic, se ejecutará el método loan_book
+        class _ButtonLoan(ft.Button):
+            def __init__(self, on_submit_callback, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.content = ft.Text("Prestar Libro")
+                self.on_click = on_submit_callback
+                self.disabled = True
 
-        self.loan_button = ft.Button(
+
+        self.book_dropdown = _DropdownLoan(
+            label="Seleccionar Libro",
+            on_text_change=self.on_change_dropdown,
+            on_select=self.on_change_dropdown,
+            on_focus=self.on_change_dropdown,
+            on_blur=self.on_change_dropdown,
+            )
+
+        self.client_dropdown = _DropdownLoan(
+            label="Seleccionar Cliente",
+            on_text_change=self.on_change_dropdown,
+            on_select=self.on_change_dropdown,
+            on_focus=self.on_change_dropdown,
+            on_blur=self.on_change_dropdown,
+            )
+
+        self.loan_button = _ButtonLoan(
             content=ft.Text("Prestar Libro"),
-            on_click=self.loan_book
+            on_submit_callback=self.on_submit
         )
 
-        # Define los controles visuales que se mostrarán en la interfaz
-        # Como esta clase hereda de Column, se mostrarán uno debajo del otro
-        self.controls = [
-            self.book_dropdown,
-            self.client_dropdown,
-            self.loan_button
-        ]
+        self.content = ft.Column(
+            controls=[
+                self.book_dropdown,
+                self.client_dropdown,
+                self.loan_button
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        )
 
-    # Método que se ejecuta cuando el usuario presiona el botón "Prestar Libro"
-    def loan_book(self, e):
+    def on_submit(self, e):
+        self.state.create_loan(
+            self.state.get_book_by_uuid(self.book_dropdown.value),
+            self.state.get_client_by_uuid(self.client_dropdown.value)
+        )
 
-        # Obtiene el UUID del libro seleccionado en el menú tipo dropdown
-        book_uuid = self.book_dropdown.value
+    def check_valid(self):
+        valid_book = any(
+            option.key == self.book_dropdown.value
+            for option in self.book_dropdown.options
+        )
 
-        # Obtiene la cédula del cliente seleccionado
-        client_cedula = self.client_dropdown.value
+        valid_client = any(
+            option.key == self.client_dropdown.value
+            for option in self.client_dropdown.options
+        )
 
-        # Llama al método create_loan del AppState
-        # Este método se encarga de verificar disponibilidad,
-        # crear el objeto Loan y actualizar el estado del libro
-        self.state.create_loan(book_uuid, client_cedula)
+        self.loan_button.disabled = not (valid_book and valid_client)
+        self.loan_button.update()
+
+
+    def on_change_dropdown(self, e):
+        self.check_valid()
+
+    def force_sync(self):
+        self.book_dropdown.set_options([ft.DropdownOption(text=book.title, key=book.uuid) for book in self.state.books if book.available])
+        self.book_dropdown.update()
+
+        self.client_dropdown.set_options([ft.DropdownOption(text=client.full_name, key=client.uuid) for client in self.state.clients])
+        self.client_dropdown.update()
+
+        self.check_valid()
+

@@ -16,3 +16,5 @@ class Book:
         # Recordatorio a la UI si el elemento estaba expandido o no
         self.dropped = dropped
 
+    def __str__(self):
+        return f"{self.title} escrito por {self.author} ({self.isbn})"

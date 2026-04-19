@@ -42,11 +42,6 @@ Toda la logica se realiza dentro de estos programas, y main es solamente posicio
 inicializacion del AppState y sincronizacion con las clases control)
 """
 
-"""
-TODO
-ARREGLAR ERRORES DE MERGE DE 3 BRANCHES
-"""
-
 def main(page: ft.Page):
     page.title = "Gestion de Libros"
     main_column = ft.Column(
@@ -77,8 +72,6 @@ def main(page: ft.Page):
     form_search = ControlFormSearchBooks(state)
     add_book = ControlAddBook(state)
 
-    control_loan_book = ControlLoanBook(state)
-
     #   Gestión de Clientes 
     # Se instancian los controles de clientes y se suscriben al AppState
     # para sincronizarse automáticamente con cada cambio en state.clients.
@@ -87,10 +80,14 @@ def main(page: ft.Page):
     form_search_clients = ControlFormSearchClients(state)
     add_client = ControlAddClient(state)
 
+    # Gestion de Loan Book
+    control_loan_book = ControlLoanBook(state)
+    state.subscribe(control_loan_book.force_sync)
+
     main_column.controls.append(
         ft.Tabs(
             selected_index=0,
-            length=3,
+            length=4,
             expand=True,
             content=ft.Column(
                 expand=True,
@@ -226,9 +223,5 @@ def main(page: ft.Page):
         ),
     )
 
-    """
-    main_column.controls.append(form_agregar_libros)
-    main_column.controls.append(lista_libros)
-    """
 
 ft.run(main)

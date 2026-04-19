@@ -19,3 +19,6 @@ class Client:
     def full_name(self):
         """Retorna el nombre completo del cliente."""
         return f"{self.name} {self.last_name}"
+
+    def __str__(self):
+        return f"{self.full_name} ({self.cedula})"

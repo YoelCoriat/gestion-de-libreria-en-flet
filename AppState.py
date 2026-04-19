@@ -71,35 +71,22 @@ class AppState:
                 return client
         return None
 
+    def get_client_by_uuid(self, uuid):
+        for client in self.clients:
+            if client.uuid == uuid:
+                return client
+        return None
+
+    def get_book_by_uuid(self, book_uuid):
+        for book in self.books:
+            if book.uuid == book_uuid:
+                return book
+        return None
     
     # Préstamo de libro
     
-    def create_loan(self, book_uuid, client_cedula):
+    def create_loan(self, book, client):
+        book.available = False
+        self.loans.append(Loan(book, client))
 
-        # Busca el cliente dentro de la lista de clientes utilizando su cédula
-        # Se usa el método get_client_by_cedula que ya existe en AppState
-        client = self.get_client_by_cedula(client_cedula)
-
-        if client is None:
-            return False
-
-        for book in self.books:
-
-            if book.uuid == book_uuid:
-
-                if book.available:
-
-                    loan = Loan(book, client)
-
-                    self.loans.append(loan)
-
-                    book.available = False
-
-                    self.notify()
-
-                    return True
-
-                else:
-                    return False
-
-        return False
+        self.notify()
