@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ControlBookList import ControlBookList
+    pass
 
 """
 Control visual de un libro individual dentro de una lista.
@@ -17,7 +17,7 @@ Funcionalidades:
 """
 
 import flet as ft
-from Book import Book
+from books.Book import Book
 
 @ft.control
 class ControlBook(ft.Container):

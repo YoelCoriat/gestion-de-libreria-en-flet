@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import flet as ft
-from ControlFormAdd import ControlFormAdd
-from Book import Book
+from books.ControlFormAdd import ControlFormAdd
+from books.Book import Book
 
 """
 Controlador de añadir libros.

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import flet as ft
-from ControlFormAddClient import ControlFormAddClient
-from Client import Client
+from clients.ControlFormAddClient import ControlFormAddClient
+from clients.Client import Client
 
 """
 ControlAddClient: Panel para registrar nuevos clientes en el sistema.

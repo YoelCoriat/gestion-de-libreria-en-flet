@@ -1,5 +1,5 @@
 import flet as ft
-from ControlBook import ControlBook
+from books.ControlBook import ControlBook
 
 """
 Esta clase controla a una BookList

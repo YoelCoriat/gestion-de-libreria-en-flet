@@ -1,5 +1,5 @@
-from Book import Book
-from Loan import Loan
+from books.Book import Book
+from loans.Loan import Loan
 
 """
 Este es el centro de nuestro programa como proyecto final.

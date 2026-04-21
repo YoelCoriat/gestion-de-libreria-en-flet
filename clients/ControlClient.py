@@ -2,10 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ControlClientList import ControlClientList
+    pass
 
 import flet as ft
-from Client import Client
+from clients.Client import Client
 
 """
 Control visual de un cliente individual dentro de una lista.

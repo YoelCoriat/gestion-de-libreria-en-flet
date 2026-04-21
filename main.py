@@ -1,18 +1,16 @@
 import flet as ft
 
-from ControlBookList import ControlBookList
-from ControlAddBook import ControlAddBook
+from books.ControlBookList import ControlBookList
+from books.ControlAddBook import ControlAddBook
 from AppState import AppState
-from ControlAvailableBookList import ControlAvailableBookList
-from ControlLoanBook import ControlLoanBook
-from ControlLoanList import ControlLoanList
-from ControlUnavailableBooklist import ControlUnavailableBookList
-from ControlFormSearchBooks import ControlFormSearchBooks
-from Client import Client
-from ControlClientList import ControlClientList
-from ControlFilteredClientList import ControlFilteredClientList
-from ControlFormSearchClients import ControlFormSearchClients
-from ControlAddClient import ControlAddClient
+from books.ControlAvailableBookList import ControlAvailableBookList
+from loans.ControlLoanBook import ControlLoanBook
+from loans.ControlLoanList import ControlLoanList
+from books.ControlUnavailableBooklist import ControlUnavailableBookList
+from books.ControlFormSearchBooks import ControlFormSearchBooks
+from clients.ControlFilteredClientList import ControlFilteredClientList
+from clients.ControlFormSearchClients import ControlFormSearchClients
+from clients.ControlAddClient import ControlAddClient
 
 """
 Punto de entrada del programa. Se encarga unicamente del posicionamiento

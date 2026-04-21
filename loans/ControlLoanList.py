@@ -1,5 +1,5 @@
 import flet as ft
-from Loan import Loan
+from loans.Loan import Loan
 
 """
 Módulo de visualizacin de prestamos activos. Parte C.

@@ -1,5 +1,5 @@
 import flet as ft
-from ControlClient import ControlClient
+from clients.ControlClient import ControlClient
 
 """
 ControlClientList: Control que muestra una lista de clientes.

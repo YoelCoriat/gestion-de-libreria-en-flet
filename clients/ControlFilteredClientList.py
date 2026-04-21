@@ -1,4 +1,4 @@
-from ControlClientList import ControlClientList
+from clients.ControlClientList import ControlClientList
 import flet as ft
 
 """
