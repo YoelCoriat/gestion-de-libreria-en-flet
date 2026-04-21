@@ -6,7 +6,7 @@ from AppState import AppState
 from books.ControlAvailableBookList import ControlAvailableBookList
 from loans.ControlLoanBook import ControlLoanBook
 from loans.ControlLoanList import ControlLoanList
-from books.ControlUnavailableBooklist import ControlUnavailableBookList
+from books.ControlUnavailableBookList import ControlUnavailableBookList
 from books.ControlFormSearchBooks import ControlFormSearchBooks
 from clients.ControlFilteredClientList import ControlFilteredClientList
 from clients.ControlFormSearchClients import ControlFormSearchClients
