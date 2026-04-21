@@ -4,6 +4,8 @@ from ControlBookList import ControlBookList
 from ControlAddBook import ControlAddBook
 from AppState import AppState
 from ControlAvailableBookList import ControlAvailableBookList
+from ControlLoanBook import ControlLoanBook
+from ControlLoanList import ControlLoanList
 from ControlUnavailableBooklist import ControlUnavailableBookList
 from ControlFormSearchBooks import ControlFormSearchBooks
 from Client import Client
@@ -13,52 +15,38 @@ from ControlFormSearchClients import ControlFormSearchClients
 from ControlAddClient import ControlAddClient
 
 """
-La forma que funciona el codigo en su esencia es que todos los datos importantes se almacenan en AppState.py y sus atributos.
-Al inicializar a cada clase de control se pasa una instancia de "AppState" donde todos los datos se encuentran.
-Cada vez que se realiza un cambio que haria alguna diferencia en las listas, o en los datos de informacion,
-se notifica al AppState para que ajuste y sincronize todos los cambios.
-Cada clase de control tiene la instancia de AppState en sus atributos, y puede referirla para acceder a los datos del programa.
+Punto de entrada del programa. Se encarga unicamente del posicionamiento
+de la UI y de la inicializacion y suscripcion de los controles al AppState.
 
-La logica es bastante simple, pero el alineamiento y el ajuste de los controles es lo que toma la mayoria del codigo.
-Un ejemplo de este comportamiento puede ser en el caso de AddBook:
-        
-        self.state.add_book(Book(
-            title=self.title.text_field.value,
-        author=self.author.text_field.value,
-        isbn=self.isbn.text_field.value))
+Toda la logica de datos de nuestro programavive en AppState.py.
+Cada control recibe una referencia al AppState al inicializarse, y se
+suscribe con state.subscribe(force_sync) para actualizarse automaticamente
+cada vez que AppState llama a notify().
 
-Al querer añadir un libro, se va a el AppState que se pasó al inicializar la clase y se acceden sus metodos diseñados
-para cada funcion
-
-Estos datos se comparten entre todos los diferentes controles, y cada vez que se hace un cambio se notifica a la clase
-de AppState con .notify().
-Es preferible no llamar a .notify() fuera de la clase, si no que intentar realizar todos los .notify() dentro de la clase,
-ya que es un proceso que es un poco "expensive" ya que refrezca todos los datos en los controles
-
-La forma que AppState sincroniza los cambios con las clases, es a traves de state.subscribe.
-Se pasa un metodo en callback que corre cada vez que se llama .notify(), y de esta forma se sincronizan los cambios
-Toda la logica se realiza dentro de estos programas, y main es solamente posicionamiento de UI de los controles (y la
-inicializacion del AppState y sincronizacion con las clases control)
+Estructura de tabs:
+  Tab 1 - Agregar Libros : formulario + lista general de libros
+  Tab 2 - Libros         : libros disponibles vs no disponibles con busqueda
+  Tab 3 - Clientes       : registro y busqueda de clientes
+  Tab 4 - Prestamos      : formulario de prestamo + lista de prestamos activos
 """
+
+#Todo gran programa empezo siendo un “Hola Mundo” lleno de bugs.
+#si continuamos compilando, el proximo commit puede ser legendario.
+
 
 def main(page: ft.Page):
     page.title = "Gestion de Libros"
-    main_column = ft.Column(
-        controls=[],
-    )
+    main_column = ft.Column(controls=[])
     page.add(
         ft.SafeArea(
-            content=ft.Container(
-                content=main_column),
+            content=ft.Container(content=main_column),
             expand=True,
-
         )
     )
 
-    # Aqui es donde se sincronizan todas las clases de control y el AppState
-    # Los metodos de sincronizacion generalmente se llaman .force_sync
     state = AppState()
 
+    #  Libros 
     control_book_list = ControlBookList(state)
     state.subscribe(control_book_list.force_sync)
 
@@ -71,18 +59,28 @@ def main(page: ft.Page):
     form_search = ControlFormSearchBooks(state)
     add_book = ControlAddBook(state)
 
-    #   Gestión de Clientes 
+    #  Clientes 
     # Se instancian los controles de clientes y se suscriben al AppState
-    # para sincronizarse automáticamente con cada cambio en state.clients.
+    # para sincronizarse automaticamente con cada cambio en state.clients.
     filtered_client_list = ControlFilteredClientList(state)
     state.subscribe(filtered_client_list.force_sync)
     form_search_clients = ControlFormSearchClients(state)
     add_client = ControlAddClient(state)
 
+    #  Prestamos 
+    # ControlLoanBook: formulario para seleccionar libro y cliente y crear el prestamo.
+    # ControlLoanList: lista de prestamos activos con boton de devolucion por cada uno.
+    # Ambos se suscriben al AppState para reflejarse ante cualquier cambio.
+    control_loan_book = ControlLoanBook(state)
+    state.subscribe(control_loan_book.force_sync)
+
+    control_loan_list = ControlLoanList(state)
+    state.subscribe(control_loan_list.force_sync)
+
     main_column.controls.append(
         ft.Tabs(
             selected_index=0,
-            length=3,
+            length=4,
             expand=True,
             content=ft.Column(
                 expand=True,
@@ -98,95 +96,116 @@ def main(page: ft.Page):
                     ft.TabBarView(
                         expand=True,
                         controls=[
+
+                            # Tab 1 - Agregar Libros
                             ft.Container(
-                                content=(
-                                    ft.Row(
-                                        controls=[control_book_list,
-                                        add_book],
-                                        vertical_alignment=ft.CrossAxisAlignment.START,
-                                        alignment=ft.MainAxisAlignment.CENTER,
-                                    )
+                                content=ft.Row(
+                                    controls=[control_book_list, add_book],
+                                    vertical_alignment=ft.CrossAxisAlignment.START,
+                                    alignment=ft.MainAxisAlignment.CENTER,
                                 ),
                             ),
-                            ft.Container(
-                                content=(
-                                    ft.Column(
-                                        controls=[
 
-                                            ft.Row(
-                                                controls=[form_search
-                                                ],
-                                                alignment=ft.MainAxisAlignment.CENTER,
-                                            ),
-
-                                            ft.Row(
-                                                controls=[
-
-                                                    ft.Column(
-                                                        controls=[
-                                                            ft.Text("Libros disponibles", size=25),
-                                                            ft.Container(
-                                                                content=available_control_book_list,
-                                                                expand=True
-                                                            )
-                                                        ],
-                                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                                    ),
-
-                                                    ft.Column(
-                                                        controls=[
-                                                            ft.Text("Libros no disponibles", size=25),
-                                                            ft.Container(
-                                                                content=unavailable_control_book_list,
-                                                                expand=True
-                                                            )
-                                                        ],
-                                                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                                    ),
-
-                                                ],
-                                                vertical_alignment=ft.CrossAxisAlignment.START,
-                                                alignment=ft.MainAxisAlignment.CENTER,
-                                                expand=True,
-                                            ),
-
-                                        ]
-                                    )
-                                ),
-                            ),
+                            # Tab 2 - Libros (disponibles y no disponibles)
                             ft.Container(
                                 content=ft.Column(
                                     controls=[
-                                         ft.Row(
-                                             controls=[form_search_clients],
-                                             alignment=ft.MainAxisAlignment.CENTER,
-                                          ),
-                                          ft.Row(
-                                              controls=[
-                                                   ft.Column(
-                                                       controls=[
-                                                            ft.Text("Clientes registrados", size=25),
-                                                            ft.Container(
-                                                                content=filtered_client_list,
-                                                                expand=True,
-                                                            ),
-                                              ],
-                                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                                          ),
-                                          add_client,
-                                        ],
-                                        vertical_alignment=ft.CrossAxisAlignment.START,
-                                        alignment=ft.MainAxisAlignment.CENTER,
-                                        expand=True,
-                                    ),
-                               ]
-                            )
-                        ),
-                            
-                            ft.Container(
-                                content=ft.Text("This is Tab 4"),
-
+                                        ft.Row(
+                                            controls=[form_search],
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                        ),
+                                        ft.Row(
+                                            controls=[
+                                                ft.Column(
+                                                    controls=[
+                                                        ft.Text("Libros disponibles", size=25),
+                                                        ft.Container(
+                                                            content=available_control_book_list,
+                                                            expand=True,
+                                                        )
+                                                    ],
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                ),
+                                                ft.Column(
+                                                    controls=[
+                                                        ft.Text("Libros no disponibles", size=25),
+                                                        ft.Container(
+                                                            content=unavailable_control_book_list,
+                                                            expand=True,
+                                                        )
+                                                    ],
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                ),
+                                            ],
+                                            vertical_alignment=ft.CrossAxisAlignment.START,
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                            expand=True,
+                                        ),
+                                    ]
+                                ),
                             ),
+
+                            # Tab 3 - Clientes
+                            ft.Container(
+                                content=ft.Column(
+                                    controls=[
+                                        ft.Row(
+                                            controls=[form_search_clients],
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                        ),
+                                        ft.Row(
+                                            controls=[
+                                                ft.Column(
+                                                    controls=[
+                                                        ft.Text("Clientes registrados", size=25),
+                                                        ft.Container(
+                                                            content=filtered_client_list,
+                                                            expand=True,
+                                                        ),
+                                                    ],
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                ),
+                                                add_client,
+                                            ],
+                                            vertical_alignment=ft.CrossAxisAlignment.START,
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                            expand=True,
+                                        ),
+                                    ]
+                                )
+                            ),
+
+                            # Tab 4 - Prestamos
+                            # Arriba: formulario para crear prestamo (ControlLoanBook)
+                            # Abajo: lista de prestamos activos con opcion de devolucion (ControlLoanList)
+                            ft.Container(
+                                content=ft.Column(
+                                    controls=[
+                                        ft.Row(
+                                            controls=[control_loan_book],
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                        ),
+                                        ft.Row(
+                                            controls=[
+                                                ft.Column(
+                                                    controls=[
+                                                        ft.Text("Préstamos activos", size=25),
+                                                        ft.Container(
+                                                            content=control_loan_list,
+                                                            expand=True,
+                                                        ),
+                                                    ],
+                                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                ),
+                                            ],
+                                            vertical_alignment=ft.CrossAxisAlignment.START,
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                            expand=True,
+                                        ),
+                                    ]
+                                ),
+                            ),
+
                         ],
                     ),
                 ],
@@ -194,9 +213,5 @@ def main(page: ft.Page):
         ),
     )
 
-    """
-    main_column.controls.append(form_agregar_libros)
-    main_column.controls.append(lista_libros)
-    """
 
 ft.run(main)
